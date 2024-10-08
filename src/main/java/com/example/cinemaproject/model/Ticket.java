@@ -17,8 +17,9 @@ public class Ticket {
     @JoinColumn(name = "session_id")
     private Session session;
 
-    private String buyerName;
-    private String buyerEmail;
+    private String status; // "куплено/возвращено"
+
+    private String userEmail; // Email пользователя, который купил билет
 
     // Геттеры и сеттеры
     public Long getId() {
@@ -37,27 +38,19 @@ public class Ticket {
         this.seat = seat;
     }
 
-    public Session getSession() {
-        return session;
+    public String getStatus() {
+        return status;
     }
 
-    public void setSession(Session session) {
-        this.session = session;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public String getBuyerName() {
-        return buyerName;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public void setBuyerName(String buyerName) {
-        this.buyerName = buyerName;
-    }
-
-    public String getBuyerEmail() {
-        return buyerEmail;
-    }
-
-    public void setBuyerEmail(String buyerEmail) {
-        this.buyerEmail = buyerEmail;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 }

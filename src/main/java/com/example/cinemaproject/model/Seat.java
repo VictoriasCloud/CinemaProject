@@ -9,13 +9,17 @@ public class Seat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int seatNumber;
-    private boolean isAvailable;
-    private double price;
+    @ManyToOne
+    @JoinColumn(name = "room_id")
+    private Room room;
 
     @ManyToOne
     @JoinColumn(name = "session_id")
     private Session session;
+
+    private String seatNumber;
+    private String seatStatus;
+    private double seatPrice;
 
     // Геттеры и сеттеры
     public Long getId() {
@@ -26,28 +30,36 @@ public class Seat {
         this.id = id;
     }
 
-    public int getSeatNumber() {
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
+    public String getSeatNumber() {
         return seatNumber;
     }
 
-    public void setSeatNumber(int seatNumber) {
+    public void setSeatNumber(String seatNumber) {
         this.seatNumber = seatNumber;
     }
 
-    public boolean isAvailable() {
-        return isAvailable;
+    public String getSeatStatus() {
+        return seatStatus;
     }
 
-    public void setAvailable(boolean available) {
-        isAvailable = available;
+    public void setSeatStatus(String seatStatus) {
+        this.seatStatus = seatStatus;
     }
 
-    public double getPrice() {
-        return price;
+    public double getSeatPrice() {
+        return seatPrice;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setSeatPrice(double seatPrice) {
+        this.seatPrice = seatPrice;
     }
 
     public Session getSession() {

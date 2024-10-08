@@ -15,9 +15,10 @@ public class Session {
     private Movie movie;
 
     private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private int hallNumber;
 
-    // Геттеры и сеттеры
+    // Геттеры сеттеры
     public Long getId() {
         return id;
     }
@@ -40,6 +41,14 @@ public class Session {
 
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
     public int getHallNumber() {

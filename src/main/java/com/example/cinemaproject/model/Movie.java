@@ -1,13 +1,8 @@
 package com.example.cinemaproject.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import java.time.LocalDate;
+import jakarta.persistence.*;
+import java.util.List;
 
-
-//код для описания сущности "Фильм"
 @Entity
 public class Movie {
     @Id
@@ -15,8 +10,9 @@ public class Movie {
     private Long id;
     private String title;
     private String description;
-    private String genre;
-    private LocalDate releaseDate;
+    private int duration;
+    @OneToMany(mappedBy = "movie")
+    private List<Session> sessions;
 
     // Геттеры и сеттеры
     public Long getId() {
@@ -43,19 +39,11 @@ public class Movie {
         this.description = description;
     }
 
-    public String getGenre() {
-        return genre;
+    public List<Session> getSessions() {
+        return sessions;
     }
 
-    public void setGenre(String genre) {
-        this.genre = genre;
-    }
-
-    public LocalDate getReleaseDate() {
-        return releaseDate;
-    }
-
-    public void setReleaseDate(LocalDate releaseDate) {
-        this.releaseDate = releaseDate;
+    public void setSessions(List<Session> sessions) {
+        this.sessions = sessions;
     }
 }

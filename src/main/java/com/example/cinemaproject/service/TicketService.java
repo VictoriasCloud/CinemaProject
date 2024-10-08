@@ -1,6 +1,8 @@
 package com.example.cinemaproject.service;
 
+import com.example.cinemaproject.model.Seat;
 import com.example.cinemaproject.model.Ticket;
+import com.example.cinemaproject.repository.SeatRepository;
 import com.example.cinemaproject.repository.TicketRepository;
 import org.springframework.stereotype.Service;
 
@@ -8,21 +10,31 @@ import org.springframework.stereotype.Service;
 public class TicketService {
 
     private final TicketRepository ticketRepository;
-    private final SeatService seatService;
-    private final SessionService sessionService;
+    private final SeatRepository seatRepository;
 
-    public TicketService(TicketRepository ticketRepository, SeatService seatService, SessionService sessionService) {
+    public TicketService(TicketRepository ticketRepository, SeatRepository seatRepository) {
         this.ticketRepository = ticketRepository;
-        this.seatService = seatService;
-        this.sessionService = sessionService;
+        this.seatRepository = seatRepository;
     }
 
-    public Ticket buyTicket(Long seatId, Long sessionId, String buyerName, String buyerEmail) {
+    public void buyTicket(Seat seat) {
         Ticket ticket = new Ticket();
-        ticket.setSeat(seatService.getSeatById(seatId));
-        ticket.setSession(sessionService.getSessionById(sessionId));
-        ticket.setBuyerName(buyerName);
-        ticket.setBuyerEmail(buyerEmail);
-        return ticketRepository.save(ticket);
+        ticket.setSeat(seat);
+        ticket.setStatus("bought");
+
+        seat.setStatus("taken");
+        seatRepository.save(seat);
+        ticketRepository.save(ticket);
+    }
+
+    public void returnTicket(Seat seat) {
+        Ticket ticket = ticketRepository.findBySeat(seat);
+        if (ticket != null) {
+            ticket.setStatus("returned");
+            seat.setStatus("free");
+
+            seatRepository.save(seat);
+            ticketRepository.save(ticket);
+        }
     }
 }
