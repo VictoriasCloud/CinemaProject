@@ -22,7 +22,7 @@ public class TicketService {
         ticket.setSeat(seat);
         ticket.setStatus("bought");
 
-        seat.setStatus("taken");
+        seat.setSeatStatus("taken");
         seatRepository.save(seat);
         ticketRepository.save(ticket);
     }
@@ -31,7 +31,7 @@ public class TicketService {
         Ticket ticket = ticketRepository.findBySeat(seat);
         if (ticket != null) {
             ticket.setStatus("returned");
-            seat.setStatus("free");
+            seat.setSeatStatus("free");
 
             seatRepository.save(seat);
             ticketRepository.save(ticket);

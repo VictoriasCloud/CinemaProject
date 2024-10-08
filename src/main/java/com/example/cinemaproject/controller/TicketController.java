@@ -1,7 +1,6 @@
 package com.example.cinemaproject.controller;
 
 import com.example.cinemaproject.model.Seat;
-import com.example.cinemaproject.model.Ticket;
 import com.example.cinemaproject.service.SeatService;
 import com.example.cinemaproject.service.TicketService;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +21,7 @@ public class TicketController {
     @PostMapping("/buy/{seatId}")
     public ResponseEntity<String> buyTicket(@PathVariable Long seatId) {
         Seat seat = seatService.getSeatById(seatId);
-        if (seat.getStatus().equals("free")) {
+        if (seat.getSeatStatus().equals("free")) {
             ticketService.buyTicket(seat);
             return ResponseEntity.ok("Ticket purchased successfully");
         } else {
@@ -33,7 +32,7 @@ public class TicketController {
     @PostMapping("/return/{seatId}")
     public ResponseEntity<String> returnTicket(@PathVariable Long seatId) {
         Seat seat = seatService.getSeatById(seatId);
-        if (seat.getStatus().equals("taken")) {
+        if (seat.getSeatStatus().equals("taken")) {
             ticketService.returnTicket(seat);
             return ResponseEntity.ok("Ticket returned successfully");
         } else {
