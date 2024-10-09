@@ -14,6 +14,9 @@ public class Session {
     @JoinColumn(name = "movie_id")
     private Movie movie;
 
+    @ManyToOne
+    @JoinColumn(name = "room_id")
+    private Room room;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private int hallNumber;
@@ -33,6 +36,14 @@ public class Session {
 
     public void setMovie(Movie movie) {
         this.movie = movie;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
     }
 
     public LocalDateTime getStartTime() {

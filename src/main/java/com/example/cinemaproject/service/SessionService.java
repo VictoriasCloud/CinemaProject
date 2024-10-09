@@ -16,6 +16,10 @@ public class SessionService {
         this.sessionRepository = sessionRepository;
     }
 
+    public Session createSession(Session session) {
+        return sessionRepository.save(session);
+    }
+
     public List<Session> getAllSessions() {
         return sessionRepository.findAll();
     }
@@ -24,17 +28,32 @@ public class SessionService {
         return sessionRepository.findById(id).orElseThrow(() -> new RuntimeException("Session not found"));
     }
 
-    public Session saveSession(Session session) {
+    // Проверка на наличие пересечений с другими сеансами в указанном зале
+    public boolean isSessionTimeAvailable(LocalDateTime startTime, LocalDateTime endTime, int roomNumber) {
+        List<Session> existingSessions = sessionRepository.findByRoomNumber(roomNumber);
+
+        // Проверка пересечения времени
+        for (Session existingSession : existingSessions) {
+            if (startTime.isBefore(existingSession.getEndTime()) && endTime.isAfter(existingSession.getStartTime())) {
+                return false;  // Есть пересечение
+            }
+        }
+        return true;  // Время свободно
+    }
+
+    public Session updateSession(Long id, Session sessionDetails) {
+        Session session = sessionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Session not found"));
+
+        session.setMovie(sessionDetails.getMovie());
+        session.setRoom(sessionDetails.getRoom());
+        session.setStartTime(sessionDetails.getStartTime());
+        session.setEndTime(sessionDetails.getEndTime());
+
         return sessionRepository.save(session);
     }
 
-    public boolean isSessionTimeAvailable(LocalDateTime startTime, LocalDateTime endTime, int hallNumber) {
-        List<Session> sessions = sessionRepository.findByHallNumber(hallNumber);
-        for (Session s : sessions) {
-            if (startTime.isBefore(s.getEndTime()) && endTime.isAfter(s.getStartTime())) {
-                return false;
-            }
-        }
-        return true;
+    public void deleteSession(Long id) {
+        sessionRepository.deleteById(id);
     }
 }

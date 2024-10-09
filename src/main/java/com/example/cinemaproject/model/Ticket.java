@@ -17,6 +17,10 @@ public class Ticket {
     @JoinColumn(name = "session_id")
     private Session session;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     private String status; // "куплено/возвращено"
 
     private String userEmail; // Email пользователя, который купил билет

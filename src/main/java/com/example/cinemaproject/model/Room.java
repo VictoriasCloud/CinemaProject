@@ -11,7 +11,7 @@ public class Room {
     private Long id;
 
     private String roomName;
-
+    private int roomNumber; //поле для номера зала
     private int seatCount;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
@@ -49,4 +49,13 @@ public class Room {
     public void setSeats(List<Seat> seats) {
         this.seats = seats;
     }
+
+    public int getRoomNumber() {
+        return roomNumber;
+    }
+
+    public void setRoomNumber(int roomNumber) {
+        this.roomNumber = roomNumber;
+    }
+
 }

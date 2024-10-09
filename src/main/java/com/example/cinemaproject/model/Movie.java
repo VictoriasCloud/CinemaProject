@@ -39,6 +39,13 @@ public class Movie {
         this.description = description;
     }
 
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
     public List<Session> getSessions() {
         return sessions;
     }

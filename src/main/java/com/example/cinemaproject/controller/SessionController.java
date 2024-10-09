@@ -18,6 +18,8 @@ public class SessionController {
         this.sessionService = sessionService;
     }
 
+
+
     @GetMapping
     public List<Session> getAllSessions() {
         return sessionService.getAllSessions();
@@ -33,14 +35,25 @@ public class SessionController {
     public ResponseEntity<String> createSession(@RequestBody Session session) {
         LocalDateTime startTime = session.getStartTime();
         LocalDateTime endTime = session.getEndTime();
-        int hallNumber = session.getHallNumber();
+        int roomNumber = session.getRoom().getRoomNumber();  // Используем номер зала
 
         // Проверяем, свободно ли время для нового сеанса
-        if (sessionService.isSessionTimeAvailable(startTime, endTime, hallNumber)) {
-            sessionService.saveSession(session);
+        if (sessionService.isSessionTimeAvailable(startTime, endTime, roomNumber)) {
+            sessionService.createSession(session);
             return ResponseEntity.ok("Session created successfully");
         } else {
             return ResponseEntity.badRequest().body("Time slot is already booked for another session");
         }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Session> updateSession(@PathVariable Long id, @RequestBody Session sessionDetails) {
+        return ResponseEntity.ok(sessionService.updateSession(id, sessionDetails));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSession(@PathVariable Long id) {
+        sessionService.deleteSession(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -28,7 +28,7 @@ public class SeatService {
     }
 
     public List<Seat> getAvailableSeats(Long sessionId) {
-        return seatRepository.findBySessionIdAndStatus(sessionId, "free");
+        return seatRepository.findBySessionIdAndSeatStatus(sessionId, "free");
     }
 
     public Seat getSeatById(Long seatId) {

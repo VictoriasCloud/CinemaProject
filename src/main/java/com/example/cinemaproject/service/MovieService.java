@@ -30,7 +30,14 @@ public class MovieService {
         return movieRepository.save(movie);
     }
 
-    // Удалить фильм по ID
+    public Movie updateMovie(Long id, Movie updatedMovie) {
+        Movie movie = getMovieById(id);
+        movie.setTitle(updatedMovie.getTitle());
+        movie.setDuration(updatedMovie.getDuration());
+        movie.setDescription(updatedMovie.getDescription());
+        return movieRepository.save(movie);
+    }
+
     public void deleteMovie(Long id) {
         movieRepository.deleteById(id);
     }
