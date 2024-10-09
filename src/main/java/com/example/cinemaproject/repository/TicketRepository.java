@@ -17,7 +17,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     // Найти билет по месту и сеансу
     Ticket findBySeatIdAndSessionId(Long seatId, Long sessionId);
     //найти билет по юзерId
-    List<Ticket> findByUserId(Long userId);
+//    List<Ticket> findByUserId(Long userId);
 
 
     // Найти билет по месту
