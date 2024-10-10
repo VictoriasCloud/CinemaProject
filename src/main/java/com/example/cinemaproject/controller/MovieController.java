@@ -17,16 +17,39 @@ public class MovieController {
         this.movieService = movieService;
     }
 
+    // Создание списка фильмов
+    @PostMapping("/batch")
+    public ResponseEntity<String> createMoviesBatch(@RequestBody List<Movie> movies) {
+        movieService.saveAll(movies);
+        return ResponseEntity.ok("Movies created successfully");
+    }
+
+    // Обновление списка фильмов
+    @PutMapping("/batch")
+    public ResponseEntity<String> updateMoviesBatch(@RequestBody List<Movie> movies) {
+        movieService.updateAll(movies);
+        return ResponseEntity.ok("Movies updated successfully");
+    }
+
+    // Удаление списка фильмов
+//    @DeleteMapping("/batch")
+//    public ResponseEntity<String> deleteMoviesBatch(@RequestBody List<Long> movieIds) {
+//        movieService.deleteAll(movieIds);
+//        return ResponseEntity.ok("Movies deleted successfully");
+//    }
+
     @GetMapping
     public List<Movie> getAllMovies() {
         return movieService.getAllMovies();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Movie> getMovieById(@PathVariable Long id) {
-        Movie movie = movieService.getMovieById(id);
-        return ResponseEntity.ok(movie);
+    // Удалить все фильмы
+    @DeleteMapping
+    public ResponseEntity<String> deleteAllMovies() {
+        movieService.deleteAllMovies();
+        return ResponseEntity.ok("All movies have been deleted successfully.");
     }
+
 
     @PostMapping
     public ResponseEntity<Movie> createMovie(@RequestBody Movie movie) {
@@ -34,14 +57,22 @@ public class MovieController {
         return ResponseEntity.ok(savedMovie);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Movie> updateMovie(@PathVariable Long id, @RequestBody Movie updatedMovie) {
-        return ResponseEntity.ok(movieService.updateMovie(id, updatedMovie));
+    // Обновить фильм
+    @PutMapping("/")
+    public ResponseEntity<Movie> updateMovie(@RequestParam Long id, @RequestBody Movie updatedMovie) {
+        Movie movie = movieService.updateMovie(id, updatedMovie);
+        return ResponseEntity.ok(movie);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMovie(@PathVariable Long id) {
+    @DeleteMapping("/")
+    public ResponseEntity<String> deleteMovie(@RequestParam Long id) {
         movieService.deleteMovie(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Movie with ID " + id + " has been successfully deleted.");
     }
+    @GetMapping("/")
+    public ResponseEntity<Movie> getMovieById(@RequestParam Long id) {
+        Movie movie = movieService.getMovieById(id);
+        return ResponseEntity.ok(movie);
+    }
+
 }
