@@ -22,8 +22,10 @@ public class Ticket {
     private User user;
 
     private String status; // "куплено/возвращено"
+    private double seatPrice; // Цена билета
+    private String seatNumber; // Номер места
 
-    private String userEmail; // Email пользователя, который купил билет
+//    private String userEmail; // Email пользователя, который купил билет
 
     // Геттеры и сеттеры
     public Long getId() {
@@ -41,6 +43,13 @@ public class Ticket {
     public void setSeat(Seat seat) {
         this.seat = seat;
     }
+    public Session getSession() {
+        return session;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
 
     public String getStatus() {
         return status;
@@ -50,11 +59,34 @@ public class Ticket {
         this.status = status;
     }
 
-    public String getUserEmail() {
-        return userEmail;
+    public double getSeatPrice() {
+        return seatPrice;
     }
 
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
+    public void setSeatPrice(double seatPrice) {
+        this.seatPrice = seatPrice;
     }
+
+    public String getSeatNumber() {
+        return seatNumber;
+    }
+
+    public void setSeatNumber(String seatNumber) {
+        this.seatNumber = seatNumber;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+//    public String getUserEmail() {
+//        return userEmail;
+//    }
+//
+//    public void setUserEmail(String userEmail) {
+//        this.userEmail = userEmail;
+//    }
 }
