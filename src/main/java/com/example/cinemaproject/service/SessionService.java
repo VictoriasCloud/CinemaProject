@@ -30,7 +30,7 @@ public class SessionService {
 
     // Проверка на наличие пересечений с другими сеансами в указанном зале
     public boolean isSessionTimeAvailable(LocalDateTime startTime, LocalDateTime endTime, int roomNumber) {
-        List<Session> existingSessions = sessionRepository.findByRoomNumber(roomNumber);
+        List<Session> existingSessions = sessionRepository.findByRoomRoomNumber(roomNumber);
 
         // Проверка пересечения времени
         for (Session existingSession : existingSessions) {

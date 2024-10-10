@@ -19,7 +19,6 @@ public class Session {
     private Room room;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private int hallNumber;
 
     // Геттеры сеттеры
     public Long getId() {
@@ -62,11 +61,4 @@ public class Session {
         this.endTime = endTime;
     }
 
-    public int getHallNumber() {
-        return hallNumber;
-    }
-
-    public void setHallNumber(int hallNumber) {
-        this.hallNumber = hallNumber;
-    }
 }
