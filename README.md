@@ -23,14 +23,20 @@ CinemaProject — это веб-приложение для управления
 4. `GET {{base_url}}/movies` — Получение списка всех фильмов.
 5. `GET {{base_url}}/movies/{id}` — Получение информации о конкретном фильме.
 6. `GET http://localhost:8080/movies/search?title=In` — Получение списка фильмов с данным совпадением в заголовке.
-6. `DELETE http://localhost:8080/movies/?id=1` Удаление фильма по айди 
-7. `DELETE http://localhost:8080/movieshttp://localhost:8080/movies` - Удаление всех фильмов
+7. `DELETE http://localhost:8080/movies/?id=1` Удаление фильма по айди 
+8. `DELETE http://localhost:8080/movies` - Удаление всех фильмов
 
 
 **Комнаты**
+1. `POST http://localhost:8080/rooms` — Добавление новой комнаты
+2. `POST http://localhost:8080/rooms/batch` - добавление списка комнат
+3. `GET http://localhost:8080/rooms` — Получение комнат для просмотра фильмов
+4. `GET http://localhost:8080/rooms/?id=`  — Получение информации о комнате по айди 
+5. `GET http://localhost:8080/rooms/search?title=`  — Получение информации о комнате по совпадению названия
+6. `PUT http://localhost:8080/rooms/?id=2`  - редактирование комнаты
+7. `DELETE http://localhost:8080/movies/?id=1` Удаление комнаты по айди
+8. `DELETE http://localhost:8080/movies` - Удаление всех комнат
 
-1. `GET http://localhost:8080/rooms` — Получение комнат(залов) для просмотра фильмоы
-2. `GET http://localhost:8080/rooms/?id=`  — Получение информации о комнате по айди 
 
 
 
