@@ -3,6 +3,9 @@ package com.example.cinemaproject.service;
 import com.example.cinemaproject.model.Movie;
 import com.example.cinemaproject.repository.MovieRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
 
 import java.util.List;
 
@@ -39,11 +42,34 @@ public class MovieService {
     }
 
     public void deleteMovie(Long id) {
-        movieRepository.deleteById(id);
+        Movie movie = movieRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found"));
+        movieRepository.delete(movie);
     }
 
-    // Найти фильм по названию
-    public Movie getMovieByTitle(String title) {
-        return movieRepository.findByTitle(title);
+
+    // Сохранение списка фильмов (batch create)
+// Сохранение списка фильмов (batch create)
+    public List<Movie> saveAll(List<Movie> movies) {
+        return movieRepository.saveAll(movies);
+    }
+
+    // не помню работает ли надо проверитьОбновление списка фильмов (batch update)
+    public void updateAll(List<Movie> movies) {
+        movieRepository.saveAll(movies); // saveAll в JPA поддерживает как создание, так и обновление
+    }
+
+    // Удаление всех фильмов
+    public void deleteAllMovies() {
+        movieRepository.deleteAll();
+    }
+
+
+//    // Найти фильм по названию
+//    public Movie getMovieByTitle(String title) {
+//        return movieRepository.findByTitle(title);
+//    }
+
+    public List<Movie> getMoviesByTitle(String title) {
+        return movieRepository.findByTitleContainingIgnoreCase(title);
     }
 }

@@ -14,15 +14,32 @@ CinemaProject — это веб-приложение для управления
 - Интеграция с Kafka для обработки сообщений (например, уведомления о сеансах и бронировании мест).
 - Базовая настройка ZooKeeper для координации Kafka.
 
-**Эндпоинты**:
+### Эндпоинты:
+
+**Фильмы(всё реализовано)**:
 1. `POST http://localhost:8080/movies` — Добавление нового фильма.
-2. `GET {{base_url}}/movies` — Получение списка всех фильмов.
-3. `GET {{base_url}}/movies/{id}` — Получение информации о конкретном фильме.
-4. `POST {{base_url}}/sessions` — Создание нового сеанса.
-5. `GET {{base_url}}/sessions` — Список всех сеансов.
-6. `GET {{base_url}}/sessions/by-date?date=2024` — Список всех сеансов по дате.
-7. `POST {{base_url}}/tickets` — Бронирование билета.
-8. `GET {{base_url}}/tickets/{id}` — Получение информации о конкретном билете.
+2. `POST http://localhost:8080/movies/batch` - добавление списка фильмов
+3. `PUT http://localhost:8080/movies/?id=2`  - редактирование фильма
+4. `GET {{base_url}}/movies` — Получение списка всех фильмов.
+5. `GET {{base_url}}/movies/{id}` — Получение информации о конкретном фильме.
+6. `GET http://localhost:8080/movies/search?title=In` — Получение списка фильмов с данным совпадением в заголовке.
+6. `DELETE http://localhost:8080/movies/?id=1` Удаление фильма по айди 
+7. `DELETE http://localhost:8080/movieshttp://localhost:8080/movies` - Удаление всех фильмов
+
+
+**Комнаты**
+
+1. `GET http://localhost:8080/rooms` — Получение комнат(залов) для просмотра фильмоы
+2. `GET http://localhost:8080/rooms/?id=`  — Получение информации о комнате по айди 
+
+
+
+
+8. `POST {{base_url}}/sessions` — Создание нового сеанса.
+8. `GET {{base_url}}/sessions` — Список всех сеансов.
+9. `GET {{base_url}}/sessions/by-date?date=2024` — Список всех сеансов по дате.
+10. `POST {{base_url}}/tickets` — Бронирование билета.
+11. `GET {{base_url}}/tickets/{id}` — Получение информации о конкретном билете.
 
 ### Будущие разработки
 
