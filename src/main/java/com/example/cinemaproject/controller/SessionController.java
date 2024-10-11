@@ -32,18 +32,11 @@ public class SessionController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createSession(@RequestBody Session session) {
-        LocalDateTime startTime = session.getStartTime();
-        LocalDateTime endTime = session.getEndTime();
-        int roomNumber = session.getRoom().getRoomNumber();  // Используем номер зала
-
-        // Проверяем, свободно ли время для нового сеанса
-        if (sessionService.isSessionTimeAvailable(startTime, endTime, roomNumber)) {
-            sessionService.createSession(session);
-            return ResponseEntity.ok("Session created successfully");
-        } else {
-            return ResponseEntity.badRequest().body("Time slot is already booked for another session");
-        }
+    public ResponseEntity<Session> createSession(@RequestParam Long movieId,
+                                                 @RequestParam Long roomId,
+                                                 @RequestParam LocalDateTime startTime) {
+        Session session = sessionService.createSession(movieId, roomId, startTime);
+        return ResponseEntity.ok(session);
     }
 
     @PutMapping("/{id}")

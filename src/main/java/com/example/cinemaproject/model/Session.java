@@ -2,6 +2,7 @@ package com.example.cinemaproject.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Session {
@@ -19,6 +20,9 @@ public class Session {
     private Room room;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+
+    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
+    private List<Seat> seats;
 
     // Геттеры сеттеры
     public Long getId() {
@@ -59,6 +63,14 @@ public class Session {
 
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
+    }
+
+    public List<Seat> getSeats() {
+        return seats;
+    }
+
+    public void setSeats(List<Seat> seats) {
+        this.seats = seats;
     }
 
 }
