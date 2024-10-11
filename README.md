@@ -27,15 +27,16 @@ CinemaProject — это веб-приложение для управления
 8. `DELETE http://localhost:8080/movies` - Удаление всех фильмов
 
 
-**Комнаты**
+**Комнаты(всё реализовано)**
 1. `POST http://localhost:8080/rooms` — Добавление новой комнаты
 2. `POST http://localhost:8080/rooms/batch` - добавление списка комнат
 3. `GET http://localhost:8080/rooms` — Получение комнат для просмотра фильмов
-4. `GET http://localhost:8080/rooms/?id=`  — Получение информации о комнате по айди 
-5. `GET http://localhost:8080/rooms/search?title=`  — Получение информации о комнате по совпадению названия
-6. `PUT http://localhost:8080/rooms/?id=2`  - редактирование комнаты
-7. `DELETE http://localhost:8080/movies/?id=1` Удаление комнаты по айди
-8. `DELETE http://localhost:8080/movies` - Удаление всех комнат
+4. `GET http://localhost:8080/rooms/?id=1`  — Получение информации о комнате по айди 
+5. `GET http://localhost:8080/rooms/search/?name=VIP`  — Получение информации о комнате по совпадению названия
+6. `GET http://localhost:8080/rooms/searchByNumber/?number=101`  — Получение информации о комнате по номера
+7. `PUT http://localhost:8080/rooms/?id=2`  - редактирование комнаты
+8. `DELETE http://localhost:8080/rooms/?id=1` Удаление комнаты по айди
+9. `DELETE http://localhost:8080/rooms` - Удаление всех комнат
 
 
 Логика такова, что при создании сеанса мы выбираем фильм(movie), зал(room), начало сеанса (start_time),
