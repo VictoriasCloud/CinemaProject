@@ -13,6 +13,7 @@ public class Room {
     private String roomName;
     private int roomNumber; //поле для номера зала
     private int seatCount;
+    private int seatPrice;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<Seat> seats;
@@ -58,4 +59,11 @@ public class Room {
         this.roomNumber = roomNumber;
     }
 
+    public int getSeatPrice() {
+        return seatPrice;
+    }
+
+    public void setSeatPrice(int seatPrice) {
+        this.seatPrice = seatPrice;
+    }
 }
