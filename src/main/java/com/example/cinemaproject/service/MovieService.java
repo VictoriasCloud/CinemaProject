@@ -48,8 +48,9 @@ public class MovieService {
 
 
     // Сохранение списка фильмов (batch create)
-    public void saveAll(List<Movie> movies) {
-        movieRepository.saveAll(movies);
+// Сохранение списка фильмов (batch create)
+    public List<Movie> saveAll(List<Movie> movies) {
+        return movieRepository.saveAll(movies);
     }
 
     // не помню работает ли надо проверитьОбновление списка фильмов (batch update)
@@ -62,13 +63,13 @@ public class MovieService {
         movieRepository.deleteAll();
     }
 
-    // Удаление списка фильмов (batch delete)
-//    public void deleteAll(List<Long> movieIds) {
-//        movieRepository.deleteAllById(movieIds);
+
+//    // Найти фильм по названию
+//    public Movie getMovieByTitle(String title) {
+//        return movieRepository.findByTitle(title);
 //    }
 
-    // Найти фильм по названию
-    public Movie getMovieByTitle(String title) {
-        return movieRepository.findByTitle(title);
+    public List<Movie> getMoviesByTitle(String title) {
+        return movieRepository.findByTitleContainingIgnoreCase(title);
     }
 }

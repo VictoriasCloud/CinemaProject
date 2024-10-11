@@ -19,10 +19,11 @@ public class MovieController {
 
     // Создание списка фильмов
     @PostMapping("/batch")
-    public ResponseEntity<String> createMoviesBatch(@RequestBody List<Movie> movies) {
-        movieService.saveAll(movies);
-        return ResponseEntity.ok("Movies created successfully");
+    public ResponseEntity<List<Movie>> createMoviesBatch(@RequestBody List<Movie> movies) {
+        List<Movie> savedMovies = movieService.saveAll(movies); // сохраняем фильмы и возвращаем список
+        return ResponseEntity.ok(savedMovies); // возвращаем список созданных фильмов в виде JSON
     }
+
 
     // Обновление списка фильмов
     @PutMapping("/batch")
@@ -73,6 +74,12 @@ public class MovieController {
     public ResponseEntity<Movie> getMovieById(@RequestParam Long id) {
         Movie movie = movieService.getMovieById(id);
         return ResponseEntity.ok(movie);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Movie>> getMoviesByTitle(@RequestParam String title) {
+        List<Movie> movies = movieService.getMoviesByTitle(title);
+        return ResponseEntity.ok(movies);
     }
 
 }
