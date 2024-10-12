@@ -5,6 +5,10 @@ import jakarta.persistence.*;
 @Entity
 public class Ticket {
 
+    public enum TicketStatus {
+        PURCHASED, RETURNED
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,7 +25,9 @@ public class Ticket {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private String status; // "куплено/возвращено"
+
+    @Enumerated(EnumType.STRING)
+    private TicketStatus ticketStatus = TicketStatus.PURCHASED; // Статус по умолчанию "куплен"
     private double seatPrice; // Цена билета
     private String seatNumber; // Номер места
 
@@ -51,12 +57,12 @@ public class Ticket {
         this.session = session;
     }
 
-    public String getStatus() {
-        return status;
+    public TicketStatus getTicketStatus() {
+        return ticketStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setTicketStatus(TicketStatus ticketStatus) {
+        this.ticketStatus = ticketStatus;
     }
 
     public double getSeatPrice() {

@@ -28,32 +28,38 @@ public class TicketController {
     }
 
     // Покупка билета на конкретное место
-    @PostMapping("/buy/{seatId}")
-    public ResponseEntity<String> buyTicket(@PathVariable Long seatId,
-                                            @RequestParam double seatPrice,
-                                            @RequestParam Long userId) {
-        Seat seat = seatService.getSeatById(seatId);
-        User user = userService.getUserById(userId);
+    @PostMapping
+    public ResponseEntity<Ticket> createTicket(@RequestBody Ticket ticket) {
+        return ResponseEntity.ok(ticketService.createTicket(ticket));
+    }
 
-        if (seat.getSeatStatus().equals("free")) {
-            ticketService.buyTicket(seat, seatPrice, seat.getSeatNumber(), user);
-            return ResponseEntity.ok("Ticket purchased successfully");
-        } else {
-            return ResponseEntity.badRequest().body("Seat is already taken");
-        }
+    @PutMapping("/{id}")
+    public ResponseEntity<Ticket> updateTicket(@PathVariable Long id, @RequestBody Ticket updatedTicket) {
+        return ResponseEntity.ok(ticketService.updateTicket(id, updatedTicket));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteTicket(@PathVariable Long id) {
+        ticketService.deleteTicket(id);
+        return ResponseEntity.ok("Ticket with ID " + id + " has been successfully deleted.");
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Ticket>> getAllTickets() {
+        return ResponseEntity.ok(ticketService.getAllTickets());
     }
 
     // Возврат билета
-    @PostMapping("/return/{seatId}")
-    public ResponseEntity<String> returnTicket(@PathVariable Long seatId) {
-        Seat seat = seatService.getSeatById(seatId);
-        if (seat.getSeatStatus().equals("taken")) {
-            ticketService.returnTicket(seat);
-            return ResponseEntity.ok("Ticket returned successfully");
-        } else {
-            return ResponseEntity.badRequest().body("Seat is not taken");
-        }
-    }
+//    @PostMapping("/return/{seatId}")
+//    public ResponseEntity<String> returnTicket(@PathVariable Long seatId) {
+//        Seat seat = seatService.getSeatById(seatId);
+//        if (seat.getSeatStatus().equals("taken")) {
+//            ticketService.returnTicket(seat);
+//            return ResponseEntity.ok("Ticket returned successfully");
+//        } else {
+//            return ResponseEntity.badRequest().body("Seat is not taken");
+//        }
+//    }
 
     // Найти все билеты для пользователя по ID
     @GetMapping("/user/{userId}")

@@ -99,6 +99,10 @@ public class SessionService {
         return sessionRepository.save(session);
     }
 
+//    public List<Session> findSessionsByMovieTitle(String title) {
+//        return sessionRepository.findByMovieTitle(title);
+//    }
+
     public void deleteSession(Long id) {
         sessionRepository.deleteById(id);
     }

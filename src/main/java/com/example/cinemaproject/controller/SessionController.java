@@ -18,15 +18,13 @@ public class SessionController {
         this.sessionService = sessionService;
     }
 
-
-
     @GetMapping
     public List<Session> getAllSessions() {
         return sessionService.getAllSessions();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Session> getSessionById(@PathVariable Long id) {
+    @GetMapping("/")
+    public ResponseEntity<Session> getSessionById(@RequestParam Long id) {
         Session session = sessionService.getSessionById(id);
         return ResponseEntity.ok(session);
     }
@@ -39,13 +37,13 @@ public class SessionController {
         return ResponseEntity.ok(session);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Session> updateSession(@PathVariable Long id, @RequestBody Session sessionDetails) {
+    @PutMapping("/")
+    public ResponseEntity<Session> updateSession(@RequestParam Long id, @RequestBody Session sessionDetails) {
         return ResponseEntity.ok(sessionService.updateSession(id, sessionDetails));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSession(@PathVariable Long id) {
+    @DeleteMapping("/")
+    public ResponseEntity<Void> deleteSession(@RequestParam Long id) {
         sessionService.deleteSession(id);
         return ResponseEntity.noContent().build();
     }

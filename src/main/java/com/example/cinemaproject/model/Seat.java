@@ -5,6 +5,10 @@ import jakarta.persistence.*;
 @Entity
 public class Seat {
 
+    public enum SeatStatus {
+        FREE, OCCUPIED
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,7 +22,8 @@ public class Seat {
     private Session session;
 
     private String seatNumber;
-    private String seatStatus;
+    @Enumerated(EnumType.STRING)
+    private SeatStatus seatStatus = SeatStatus.FREE;
     private double seatPrice;
 
     // Геттеры и сеттеры
@@ -46,11 +51,11 @@ public class Seat {
         this.seatNumber = seatNumber;
     }
 
-    public String getSeatStatus() {
+    public SeatStatus getSeatStatus() {
         return seatStatus;
     }
 
-    public void setSeatStatus(String seatStatus) {
+    public void setSeatStatus(SeatStatus seatStatus) {
         this.seatStatus = seatStatus;
     }
 
