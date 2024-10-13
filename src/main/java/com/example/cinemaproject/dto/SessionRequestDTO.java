@@ -2,11 +2,11 @@ package com.example.cinemaproject.dto;
 
 import java.time.LocalDateTime;
 
-public class SessionRequest {
-
+public class SessionRequestDTO {
     private Long movieId;
     private Long roomId;
     private LocalDateTime startTime;
+    private Double ticketPriceModifier; // Надбавка к базовой цене за место
 
     // Геттеры и сеттеры
     public Long getMovieId() {
@@ -31,5 +31,13 @@ public class SessionRequest {
 
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
+    }
+
+    public Double getTicketPriceModifier() {
+        return ticketPriceModifier;
+    }
+
+    public void setTicketPriceModifier(Double ticketPriceModifier) {
+        this.ticketPriceModifier = ticketPriceModifier;
     }
 }

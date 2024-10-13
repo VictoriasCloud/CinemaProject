@@ -1,12 +1,14 @@
 package com.example.cinemaproject.controller;
 
-import com.example.cinemaproject.dto.SessionRequest;
+import com.example.cinemaproject.dto.SessionRequestDTO;
+import com.example.cinemaproject.dto.SessionUpdateDTO;
 import com.example.cinemaproject.model.Session;
 import com.example.cinemaproject.service.SessionService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -31,25 +33,34 @@ public class SessionController {
     }
 
     @PostMapping
-    public ResponseEntity<Session> createSession(@RequestBody SessionRequest sessionRequest) {
+    public ResponseEntity<Session> createSession(@RequestBody SessionRequestDTO sessionRequestDTO) {
         // Извлечение данных из объекта sessionRequest
-        Long movieId = sessionRequest.getMovieId();
-        Long roomId = sessionRequest.getRoomId();
-        LocalDateTime startTime = sessionRequest.getStartTime();
-
-        // Вызов метода сервиса для создания сеанса
-        Session session = sessionService.createSession(movieId, roomId, startTime);
+        Session session = sessionService.createSession(sessionRequestDTO);
         return ResponseEntity.ok(session);
     }
 
     @PutMapping("/")
-    public ResponseEntity<Session> updateSession(@RequestParam Long id, @RequestBody Session sessionDetails) {
-        return ResponseEntity.ok(sessionService.updateSession(id, sessionDetails));
+    public ResponseEntity<Session> updateSession(@RequestParam Long id, @RequestBody SessionUpdateDTO sessionUpdateDTO) {
+        Session updatedSession = sessionService.updateSession(id, sessionUpdateDTO);
+        return ResponseEntity.ok(updatedSession);
     }
 
     @DeleteMapping("/")
-    public ResponseEntity<Void> deleteSession(@RequestParam Long id) {
+    public ResponseEntity<String> deleteSession(@RequestParam Long id) {
         sessionService.deleteSession(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Session with ID " + id + " has been successfully deleted.");
+    }
+
+    // Удаление всех сессий
+    @DeleteMapping
+    public ResponseEntity<String> deleteAllSessions() {
+        sessionService.deleteAllSessions();
+        return ResponseEntity.ok("All sessions have been deleted.");
+    }
+
+    @GetMapping("/by-date")
+    public ResponseEntity<List<Session>> getSessionsByDate(@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        List<Session> sessions = sessionService.getSessionsByDate(date);
+        return ResponseEntity.ok(sessions);
     }
 }

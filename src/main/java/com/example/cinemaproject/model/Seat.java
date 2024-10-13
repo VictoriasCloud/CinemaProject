@@ -1,5 +1,6 @@
 package com.example.cinemaproject.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -15,7 +16,9 @@ public class Seat {
 
     @ManyToOne
     @JoinColumn(name = "room_id")
+    @JsonBackReference
     private Room room;
+
 
     @ManyToOne
     @JoinColumn(name = "session_id")
