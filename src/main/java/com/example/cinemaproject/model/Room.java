@@ -1,5 +1,6 @@
 package com.example.cinemaproject.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -16,7 +17,9 @@ public class Room {
     private int seatPrice;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Seat> seats;
+
 
     // Геттеры и сеттеры
     public Long getId() {
