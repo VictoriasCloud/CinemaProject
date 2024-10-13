@@ -1,5 +1,6 @@
 package com.example.cinemaproject.controller;
 
+import com.example.cinemaproject.dto.SessionRequest;
 import com.example.cinemaproject.model.Session;
 import com.example.cinemaproject.service.SessionService;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +31,13 @@ public class SessionController {
     }
 
     @PostMapping
-    public ResponseEntity<Session> createSession(@RequestParam Long movieId,
-                                                 @RequestParam Long roomId,
-                                                 @RequestParam LocalDateTime startTime) {
+    public ResponseEntity<Session> createSession(@RequestBody SessionRequest sessionRequest) {
+        // Извлечение данных из объекта sessionRequest
+        Long movieId = sessionRequest.getMovieId();
+        Long roomId = sessionRequest.getRoomId();
+        LocalDateTime startTime = sessionRequest.getStartTime();
+
+        // Вызов метода сервиса для создания сеанса
         Session session = sessionService.createSession(movieId, roomId, startTime);
         return ResponseEntity.ok(session);
     }

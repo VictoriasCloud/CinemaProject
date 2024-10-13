@@ -31,24 +31,26 @@ public class SessionService {
     }
 
     public Session createSession(Long movieId, Long roomId, LocalDateTime startTime) {
+        // Найти фильм и зал
         Movie movie = movieRepository.findById(movieId)
                 .orElseThrow(() -> new RuntimeException("Movie not found"));
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new RuntimeException("Room not found"));
 
-        // Вычисляем конец сеанса на основе длительности фильма
+        // Вычисляем время окончания сеанса
         LocalDateTime endTime = startTime.plusMinutes(movie.getDuration());
 
-        // Создаём сеанс
+        // Создаём новый сеанс
         Session session = new Session();
         session.setMovie(movie);
         session.setRoom(room);
         session.setStartTime(startTime);
         session.setEndTime(endTime);
 
+        // Сохраняем сеанс
         session = sessionRepository.save(session);
 
-        // Создаём места (Seats) на основе количества мест в зале
+        // Создаём места для сеанса
         List<Seat> seats = new ArrayList<>();
         for (int i = 1; i <= room.getSeatCount(); i++) {
             Seat seat = new Seat();
@@ -59,7 +61,7 @@ public class SessionService {
             seats.add(seat);
         }
 
-        // Сохраняем места
+        // Сохраняем места в базе данных
         seatRepository.saveAll(seats);
         session.setSeats(seats);
 

@@ -1,4 +1,7 @@
 package com.example.cinemaproject.model;
+import com.example.cinemaproject.model.Seat;
+import com.example.cinemaproject.model.Session;
+import com.example.cinemaproject.model.User;
 
 import jakarta.persistence.*;
 
@@ -27,7 +30,7 @@ public class Ticket {
 
 
     @Enumerated(EnumType.STRING)
-    private TicketStatus ticketStatus = TicketStatus.PURCHASED; // Статус по умолчанию "куплен"
+    public TicketStatus ticketStatus = TicketStatus.PURCHASED; // Статус по умолчанию "куплен"
     private double seatPrice; // Цена билета
     private String seatNumber; // Номер места
 

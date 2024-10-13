@@ -3,6 +3,12 @@ package com.example.cinemaproject.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import com.example.cinemaproject.model.Seat;
+import com.example.cinemaproject.model.Movie;
+import com.example.cinemaproject.model.Room;
+import com.example.cinemaproject.model.User;
+
+
 
 @Entity
 public class Session {
