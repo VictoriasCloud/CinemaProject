@@ -15,6 +15,16 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    // Поиск пользователя по email, создание нового пользователя при отсутствии
+    public User findOrCreateUser(String email, String fullName) {
+        return userRepository.findByEmail(email)
+                .orElseGet(() -> {
+                    User newUser = new User();
+                    newUser.setEmail(email);
+                    newUser.setFullName(fullName);
+                    return userRepository.save(newUser);
+                });
+    }
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
@@ -27,10 +37,12 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User updateUser(Long id, User updatedUser) {
-        User user = getUserById(id);
-        user.setName(updatedUser.getName());
-        user.setEmail(updatedUser.getEmail());
+    // Обновление данных пользователя
+    public User updateUser(Long id, String email, String fullName) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setEmail(email);
+        user.setFullName(fullName);
         return userRepository.save(user);
     }
 

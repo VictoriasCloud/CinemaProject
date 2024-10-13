@@ -3,7 +3,10 @@ import com.example.cinemaproject.model.Seat;
 import com.example.cinemaproject.model.Session;
 import com.example.cinemaproject.model.User;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 public class Ticket {
@@ -21,6 +24,7 @@ public class Ticket {
     private Seat seat;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "session_id")
     private Session session;
 
@@ -33,6 +37,11 @@ public class Ticket {
     public TicketStatus ticketStatus = TicketStatus.PURCHASED; // Статус по умолчанию "куплен"
     private double seatPrice; // Цена билета
     private String seatNumber; // Номер места
+
+    // Дополнительная информация о билете
+    private String movieTitle; // название фильма
+    private LocalDateTime sessionStartTime;
+    private LocalDateTime sessionEndTime;
 
 //    private String userEmail; // Email пользователя, который купил билет
 
@@ -91,11 +100,28 @@ public class Ticket {
     public void setUser(User user) {
         this.user = user;
     }
-//    public String getUserEmail() {
-//        return userEmail;
-//    }
-//
-//    public void setUserEmail(String userEmail) {
-//        this.userEmail = userEmail;
-//    }
+    // Методы для movieTitle, sessionStartTime, sessionEndTime
+    public String getMovieTitle() {
+        return movieTitle;
+    }
+
+    public void setMovieTitle(String movieTitle) {
+        this.movieTitle = movieTitle;
+    }
+
+    public LocalDateTime getSessionStartTime() {
+        return sessionStartTime;
+    }
+
+    public void setSessionStartTime(LocalDateTime sessionStartTime) {
+        this.sessionStartTime = sessionStartTime;
+    }
+
+    public LocalDateTime getSessionEndTime() {
+        return sessionEndTime;
+    }
+
+    public void setSessionEndTime(LocalDateTime sessionEndTime) {
+        this.sessionEndTime = sessionEndTime;
+    }
 }

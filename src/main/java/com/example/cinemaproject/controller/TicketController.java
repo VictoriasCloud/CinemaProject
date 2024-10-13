@@ -1,102 +1,122 @@
 package com.example.cinemaproject.controller;
 
-import com.example.cinemaproject.model.Seat;
-import com.example.cinemaproject.model.User;
+import com.example.cinemaproject.dto.TicketPurchaseDTO;
+import com.example.cinemaproject.dto.TicketResponseDTO;
 import com.example.cinemaproject.model.Ticket;
-
-import com.example.cinemaproject.service.SeatService;
 import com.example.cinemaproject.service.TicketService;
-import com.example.cinemaproject.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 
 @RestController
 @RequestMapping("/tickets")
 public class TicketController {
 
     private final TicketService ticketService;
-    private final SeatService seatService;
-    private final UserService userService;
 
-    public TicketController(TicketService ticketService, SeatService seatService, UserService userService) {
+    public TicketController(TicketService ticketService) {
         this.ticketService = ticketService;
-        this.seatService = seatService;
-        this.userService = userService;
     }
 
-    // Покупка билета на конкретное место
+    // Создание
     @PostMapping
-    public ResponseEntity<Ticket> createTicket(@RequestBody Ticket ticket) {
-        return ResponseEntity.ok(ticketService.createTicket(ticket));
+    public ResponseEntity<Ticket> createTicket(@RequestBody TicketPurchaseDTO ticketPurchaseDTO) {
+        Ticket ticket = ticketService.createTicket(ticketPurchaseDTO);
+        return ResponseEntity.ok(ticket);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Ticket> updateTicket(@PathVariable Long id, @RequestBody Ticket updatedTicket) {
-        return ResponseEntity.ok(ticketService.updateTicket(id, updatedTicket));
+    // Получить билеты по ID пользователя
+    @GetMapping("/user/")
+    public ResponseEntity<List<TicketResponseDTO>> getTicketsByUserId(@RequestParam Long userId) {
+        List<TicketResponseDTO> tickets = ticketService.getTicketsByUserId(userId);
+
+        if (tickets.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Если билеты не найдены
+        }
+
+        return ResponseEntity.ok(tickets);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteTicket(@PathVariable Long id) {
-        ticketService.deleteTicket(id);
-        return ResponseEntity.ok("Ticket with ID " + id + " has been successfully deleted.");
-    }
-
+    // Получение всех билетов с DTO
     @GetMapping
-    public ResponseEntity<List<Ticket>> getAllTickets() {
-        return ResponseEntity.ok(ticketService.getAllTickets());
-    }
+    public ResponseEntity<List<TicketResponseDTO>> getAllTickets() {
+        List<TicketResponseDTO> tickets = ticketService.getAllTickets();
 
-    // Возврат билета
-//    @PostMapping("/return/{seatId}")
-//    public ResponseEntity<String> returnTicket(@PathVariable Long seatId) {
-//        Seat seat = seatService.getSeatById(seatId);
-//        if (seat.getSeatStatus().equals("taken")) {
-//            ticketService.returnTicket(seat);
-//            return ResponseEntity.ok("Ticket returned successfully");
-//        } else {
-//            return ResponseEntity.badRequest().body("Seat is not taken");
-//        }
-//    }
+        if (tickets.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Если билетов нет
+        }
 
-    // Найти все билеты для пользователя по ID
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<Object> getTicketsByUserId(@PathVariable Long userId) {
-        List<Ticket> tickets = ticketService.findTicketsByUserId(userId);
         return ResponseEntity.ok(tickets);
     }
 
-    // Найти все билеты для пользователя по email
-    @GetMapping("/user/email/{email}")
-    public ResponseEntity<List<Ticket>> getTicketsByUserEmail(@PathVariable String email) {
-        List<Ticket> tickets = ticketService.findTicketsByUserEmail(email);
+    // Get билеты по имени пользователя
+    @GetMapping("/user/search")
+    public ResponseEntity<List<TicketResponseDTO>> getTicketsByUserFullName(@RequestParam String fullName) {
+        List<TicketResponseDTO> tickets = ticketService.getTicketsByUserFullName(fullName);
+
+        if (tickets.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Если билеты не найдены по имени пользователя
+        }
+
         return ResponseEntity.ok(tickets);
     }
 
-    // Найти все билеты для пользователя по имени
-    @GetMapping("/user/name/{name}")
-    public ResponseEntity<List<Ticket>> getTicketsByUserName(@PathVariable String name) {
-        List<Ticket> tickets = ticketService.findTicketsByUserName(name);
+
+    // Get билеты по статусу (купленные или возвращенные)
+    @GetMapping("/status/")
+    public ResponseEntity<List<TicketResponseDTO>> getTicketsByStatus(@RequestParam Ticket.TicketStatus status) {
+        List<TicketResponseDTO> tickets = ticketService.getTicketsByStatus(status);
+
+        if (tickets.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Если билеты с таким статусом не найдены
+        }
+
         return ResponseEntity.ok(tickets);
     }
 
-    // Найти билет по месту и сеансу
-    @GetMapping("/seat/{seatNumber}/session/{sessionId}")
-    public ResponseEntity<Ticket> getTicketBySeatAndSession(@PathVariable String seatNumber, @PathVariable Long sessionId) {
-        Ticket ticket = ticketService.findTicketBySeatAndSession(seatNumber, sessionId);
-        if (ticket != null) {
+    // Get билеты по ID сеанса
+    @GetMapping("/session/")
+    public ResponseEntity<List<TicketResponseDTO>> getTicketsBySessionId(@RequestParam Long sessionId) {
+        List<TicketResponseDTO> tickets = ticketService.getTicketsBySessionId(sessionId);
+
+        if (tickets.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Если билеты на этот сеанс не найдены
+        }
+
+        return ResponseEntity.ok(tickets);
+    }
+
+
+
+    // Возврат
+    @PutMapping("/")
+    public ResponseEntity<TicketResponseDTO> returnTicket(@RequestParam Long ticketId) {
+        try {
+            TicketResponseDTO ticket = ticketService.returnTicket(ticketId);
             return ResponseEntity.ok(ticket);
-        } else {
-            return ResponseEntity.badRequest().body(null);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Если билет не найден
         }
     }
 
-    // Найти все билеты на конкретный сеанс
-    @GetMapping("/session/{sessionId}")
-    public ResponseEntity<List<Ticket>> getTicketsBySession(@PathVariable Long sessionId) {
-        List<Ticket> tickets = ticketService.findTicketsBySessionId(sessionId);
-        return ResponseEntity.ok(tickets);
+
+    // Удаление билета по ID
+    @DeleteMapping("/")
+    public ResponseEntity<?> deleteTicket(@RequestParam Long ticketId) {
+        try {
+            ticketService.deleteTicket(ticketId);
+            return ResponseEntity.ok("Ticket has been deleted.");
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ticket not found."); // Если билет не найден
+        }
+    }
+
+    // Удаление всех билетов
+    @DeleteMapping
+    public ResponseEntity<?> deleteAllTickets() {
+        ticketService.deleteAllTickets();
+        return ResponseEntity.ok("All tickets have been deleted.");
     }
 }
