@@ -11,7 +11,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> handleRuntimeException(RuntimeException ex, WebRequest request) {
-        // Возвращаем кастомный ответ с сообщением об ошибке
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+        // Проверяем сообщение ошибки для определения типа
+        if (ex.getMessage().contains("not found")) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+        }
     }
+
 }
