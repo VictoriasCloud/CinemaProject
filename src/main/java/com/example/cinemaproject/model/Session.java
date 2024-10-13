@@ -1,7 +1,16 @@
 package com.example.cinemaproject.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
+import com.example.cinemaproject.model.Seat;
+import com.example.cinemaproject.model.Movie;
+import com.example.cinemaproject.model.Room;
+import com.example.cinemaproject.model.User;
+
+
 
 @Entity
 public class Session {
@@ -12,14 +21,20 @@ public class Session {
 
     @ManyToOne
     @JoinColumn(name = "movie_id")
+    @JsonBackReference
     private Movie movie;
+
 
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private int hallNumber;
+    private double seatPrice; // Цена билета на данный сеанс
+
+    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Seat> seats;
 
     // Геттеры сеттеры
     public Long getId() {
@@ -62,11 +77,20 @@ public class Session {
         this.endTime = endTime;
     }
 
-    public int getHallNumber() {
-        return hallNumber;
+    public double getSeatPrice() {
+        return seatPrice;
     }
 
-    public void setHallNumber(int hallNumber) {
-        this.hallNumber = hallNumber;
+    public void setSeatPrice(double seatPrice) {
+        this.seatPrice = seatPrice;
     }
+
+    public List<Seat> getSeats() {
+        return seats;
+    }
+
+    public void setSeats(List<Seat> seats) {
+        this.seats = seats;
+    }
+
 }

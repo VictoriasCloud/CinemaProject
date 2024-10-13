@@ -22,7 +22,7 @@ public class SeatService {
             Seat seat = new Seat();
             seat.setSession(session);
             seat.setSeatNumber(String.valueOf(i));
-            seat.setSeatStatus("free");
+            seat.setSeatStatus(Seat.SeatStatus.valueOf("free"));
             seatRepository.save(seat);
         }
     }

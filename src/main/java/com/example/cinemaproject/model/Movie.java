@@ -1,5 +1,6 @@
 package com.example.cinemaproject.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -11,7 +12,8 @@ public class Movie {
     private String title;
     private String description;
     private int duration;
-    @OneToMany(mappedBy = "movie")
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
+    @JsonIgnore // или @JsonManagedReference
     private List<Session> sessions;
 
     // Геттеры и сеттеры
