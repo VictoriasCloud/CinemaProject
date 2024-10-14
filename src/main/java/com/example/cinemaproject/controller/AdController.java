@@ -1,21 +1,23 @@
 package com.example.cinemaproject.controller;
 
-import com.example.cinemaproject.service.KafkaProducerService;
+import com.example.cinemaproject.service.AdService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/ads")
 public class AdController {
 
-    private final KafkaProducerService kafkaProducerService;
+    private final AdService adService;
 
-    public AdController(KafkaProducerService kafkaProducerService) {
-        this.kafkaProducerService = kafkaProducerService;
+    public AdController(AdService adService) {
+        this.adService = adService;
     }
 
     @PostMapping("/send")
-    public String sendAdMessage(@RequestParam String message) {
-        kafkaProducerService.sendAdMessage(message);
-        return "Message sent to theatre.infra.ads";
+    public ResponseEntity<String> sendAd(@RequestParam String roomNumber, @RequestParam String message) {
+        adService.sendAd(roomNumber, message);
+        return ResponseEntity.ok("Ad message sent successfully");
     }
 }
+

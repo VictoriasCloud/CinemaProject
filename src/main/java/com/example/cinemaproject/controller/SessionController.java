@@ -3,12 +3,15 @@ package com.example.cinemaproject.controller;
 import com.example.cinemaproject.dto.SessionRequestDTO;
 import com.example.cinemaproject.dto.SessionUpdateDTO;
 import com.example.cinemaproject.model.Session;
+import com.example.cinemaproject.service.KafkaProducerService;
+import com.example.cinemaproject.service.SessionSchedulerService;
 import com.example.cinemaproject.service.SessionService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -16,9 +19,11 @@ import java.util.List;
 public class SessionController {
 
     private final SessionService sessionService;
+    private final KafkaProducerService kafkaProducerService;
 
-    public SessionController(SessionService sessionService) {
+    public SessionController(SessionService sessionService, KafkaProducerService kafkaProducerService) {
         this.sessionService = sessionService;
+        this.kafkaProducerService = kafkaProducerService;
     }
 
     @GetMapping
@@ -33,7 +38,7 @@ public class SessionController {
     }
 
     @PostMapping
-    public ResponseEntity<Session> createSession(@RequestBody SessionRequestDTO sessionRequestDTO) {
+    public ResponseEntity<Session> createSession(@RequestBody SessionRequestDTO sessionRequestDTO, SessionSchedulerService sessionSchedulerService) {
         // Извлечение данных из объекта sessionRequest
         Session session = sessionService.createSession(sessionRequestDTO);
         return ResponseEntity.ok(session);
@@ -62,5 +67,11 @@ public class SessionController {
     public ResponseEntity<List<Session>> getSessionsByDate(@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         List<Session> sessions = sessionService.getSessionsByDate(date);
         return ResponseEntity.ok(sessions);
+    }
+
+    @PostMapping("/start")
+    public ResponseEntity<String> startSession(@RequestParam String roomNumber, @RequestParam LocalDateTime startTime) {
+        kafkaProducerService.sendSessionStartMessage(roomNumber, startTime);
+        return ResponseEntity.ok("Сеанс для зала " + roomNumber + " начался.");
     }
 }
