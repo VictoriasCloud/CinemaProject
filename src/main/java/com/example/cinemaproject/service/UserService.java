@@ -15,16 +15,6 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    // Поиск пользователя по email, создание нового пользователя при отсутствии
-    public User findOrCreateUser(String email, String fullName) {
-        return userRepository.findByEmail(email)
-                .orElseGet(() -> {
-                    User newUser = new User();
-                    newUser.setEmail(email);
-                    newUser.setFullName(fullName);
-                    return userRepository.save(newUser);
-                });
-    }
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
@@ -48,5 +38,8 @@ public class UserService {
 
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+    public void deleteAllUsers() {
+        userRepository.deleteAll();
     }
 }
