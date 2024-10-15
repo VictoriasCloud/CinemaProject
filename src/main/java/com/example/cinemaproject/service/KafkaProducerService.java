@@ -45,6 +45,35 @@ public class KafkaProducerService {
         }
     }
 
+    public void sendCombinedMessage(String movieTitle, double seatPrice, String roomNumber, LocalDateTime sessionStartTime, LocalDateTime sessionEndTime) {
+        try {
+            // Текстовое сообщение
+            String textMessage = String.format("Привет, у нас появился в прокате новый фильм '%s', приходи посмотреть %s!",
+                    movieTitle, sessionStartTime.toString());
+
+            // JSON-сообщение
+            Map<String, Object> jsonMessage = new LinkedHashMap<>();
+            jsonMessage.put("movieTitle", movieTitle);
+            jsonMessage.put("seatPrice", seatPrice);
+            jsonMessage.put("roomNumber", roomNumber);
+            jsonMessage.put("sessionStartTime", sessionStartTime.toString());
+            jsonMessage.put("sessionEndTime", sessionEndTime.toString());
+
+            // Преобразование JSON в строку
+            String jsonMessageString = objectMapper.writeValueAsString(jsonMessage);
+
+            // Комбинируем текст и JSON
+            String combinedMessage = textMessage + " | " + jsonMessageString;
+
+            // Отправка сообщения в Kafka
+            kafkaTemplate.send("theatre.infra.ads", combinedMessage);
+            System.out.println("Отправлено комбинированное сообщение: " + combinedMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 
     // Отправка JSON-сообщения о начале сеанса
@@ -61,27 +90,4 @@ public class KafkaProducerService {
         }
     }
 
-//    public void sendBellsMessage(String message) {
-//        kafkaTemplate.send("theatre.infra.bells", message);
-//        System.out.println("Sent message to theatre.infra.bells: " + message);
-//    }
-//
-//    public void sendSessionStartMessage(String roomNumber, LocalDateTime startTime) {
-//        try {
-//            // Создание JSON-объекта
-//            Map<String, String> message = new HashMap<>();
-//            message.put("roomNumber", roomNumber);
-//            message.put("startTime", startTime.toString());
-//
-//            // Преобразование объекта в строку JSON
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            String jsonMessage = objectMapper.writeValueAsString(message);
-//
-//            // Отправка сообщения в Kafka
-//            kafkaTemplate.send("theatre.infra.bells", jsonMessage);
-//            System.out.println("Отправлено сообщение в theatre.infra.bells: " + jsonMessage);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
 }
