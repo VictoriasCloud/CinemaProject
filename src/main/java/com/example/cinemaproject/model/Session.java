@@ -29,7 +29,7 @@ public class Session {
     private Room room;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private double seatPrice; // Цена билета на данный сеанс
+    private double seatPrice;
 
     @OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
     @JsonIgnore

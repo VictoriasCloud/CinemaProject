@@ -52,8 +52,6 @@ public class SeatService {
         return seatRepository.save(seat);
     }
 
-
-    // Удаление места
     public void deleteSeat(Long id) {
         Seat seat = getSeatById(id);
 

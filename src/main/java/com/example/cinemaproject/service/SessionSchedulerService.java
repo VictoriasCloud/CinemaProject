@@ -47,7 +47,7 @@ public class SessionSchedulerService {
     public void cancelScheduledSessionStart(Session session) {
         ScheduledFuture<?> scheduledTask = scheduledTasks.get(session.getId());
         if (scheduledTask != null && !scheduledTask.isDone()) {
-            scheduledTask.cancel(true); // Отмена задания
+            scheduledTask.cancel(true); // Отмена
             scheduledTasks.remove(session.getId());
         }
     }

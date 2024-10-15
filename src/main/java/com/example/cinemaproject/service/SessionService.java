@@ -107,7 +107,6 @@ public class SessionService {
         return sessionRepository.findById(id).orElseThrow(() -> new RuntimeException("Session not found"));
     }
 
-
     public Session updateSession(Long sessionId, SessionUpdateDTO sessionUpdateDTO) {
         // Находим сессию по ID
         Session session = sessionRepository.findById(sessionId)
@@ -125,16 +124,14 @@ public class SessionService {
                         + occupiedSession.getMovie().getTitle() + "'(id=" + occupiedSession.getMovie().getId() + ") from "
                         + occupiedSession.getStartTime() + " to " + occupiedSession.getEndTime());
             }
-
             // Устанавливаем новое время начала и окончания
             session.setStartTime(newStartTime);
             session.setEndTime(newEndTime);
 
             // Отменяем старое расписание и запланируем новое
-            sessionSchedulerService.cancelScheduledSessionStart(session); // Отменяем старое задание
-            sessionSchedulerService.scheduleSessionStart(session); // Планируем новое задание
+            sessionSchedulerService.cancelScheduledSessionStart(session);
+            sessionSchedulerService.scheduleSessionStart(session);
         }
-
         // Обновляем цену на места и в самой сессии, если передана новая цена
         if (sessionUpdateDTO.getSeatPrice() != null) {
             List<Seat> seats = seatRepository.findBySessionId(session.getId());

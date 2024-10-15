@@ -51,22 +51,16 @@ public class MovieService {
     }
 
 
-    // Сохранение списка фильмов (batch create)
-// Сохранение списка фильмов (batch create)
     public List<Movie> saveAll(List<Movie> movies) {
         return movieRepository.saveAll(movies);
     }
 
-    // не помню работает ли надо проверитьОбновление списка фильмов (batch update)
     public void updateAll(List<Movie> movies) {
-        movieRepository.saveAll(movies); // saveAll в JPA поддерживает как создание, так и обновление
+        movieRepository.saveAll(movies);
     }
-
-    // Удаление всех фильмов
     public void deleteAllMovies() {
         movieRepository.deleteAll();
     }
-
 
     // Поиск фильмов по названию с пагинацией
     public Page<Movie> getMoviesByTitle(String title, Pageable pageable) {

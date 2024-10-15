@@ -12,7 +12,7 @@ public class Room {
     private Long id;
 
     private String roomName;
-    private int roomNumber; //поле для номера зала
+    private int roomNumber;
     private int seatCount;
     private int seatPrice;
 

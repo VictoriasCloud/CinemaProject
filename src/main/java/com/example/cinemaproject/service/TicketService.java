@@ -99,7 +99,6 @@ public class TicketService {
         return tickets.stream().map(this::mapToTicketResponseDTO).collect(Collectors.toList());
     }
 
-    // Получение билетов по имени пользователя
     public List<TicketResponseDTO> getTicketsByUserFullName(String fullName) {
         List<Ticket> tickets = ticketRepository.findByUserFullName(fullName);
         if (tickets.isEmpty()) {
@@ -108,7 +107,6 @@ public class TicketService {
         return tickets.stream().map(this::mapToTicketResponseDTO).collect(Collectors.toList());
     }
 
-    // Получение билетов по статусу
     public List<TicketResponseDTO> getTicketsByStatus(Ticket.TicketStatus status) {
         List<Ticket> tickets = ticketRepository.findByTicketStatus(status);
         if (tickets.isEmpty()) {
@@ -144,14 +142,12 @@ public class TicketService {
     }
 
 
-    // Удаление билета по ID
     public void deleteTicket(Long ticketId) {
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new RuntimeException("Ticket not found with ID " + ticketId));
         ticketRepository.delete(ticket);
     }
 
-    // Удаление всех билетов
     public void deleteAllTickets() {
         if (ticketRepository.count() == 0) {
             throw new RuntimeException("No tickets to delete.");

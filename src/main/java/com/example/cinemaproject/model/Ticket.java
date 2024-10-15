@@ -35,15 +35,14 @@ public class Ticket {
 
     @Enumerated(EnumType.STRING)
     public TicketStatus ticketStatus = TicketStatus.PURCHASED; // Статус по умолчанию "куплен"
-    private double seatPrice; // Цена билета
-    private String seatNumber; // Номер места
+    private double seatPrice;
+    private String seatNumber;
 
-    // Дополнительная информация о билете
-    private String movieTitle; // название фильма
+
+    private String movieTitle;
     private LocalDateTime sessionStartTime;
     private LocalDateTime sessionEndTime;
 
-//    private String userEmail; // Email пользователя, который купил билет
 
     // Геттеры и сеттеры
     public Long getId() {

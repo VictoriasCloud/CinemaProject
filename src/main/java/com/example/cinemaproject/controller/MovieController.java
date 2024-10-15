@@ -37,12 +37,6 @@ public class MovieController {
         return ResponseEntity.ok("Movies updated successfully");
     }
 
-    // Удаление списка фильмов
-//    @DeleteMapping("/batch")
-//    public ResponseEntity<String> deleteMoviesBatch(@RequestBody List<Long> movieIds) {
-//        movieService.deleteAll(movieIds);
-//        return ResponseEntity.ok("Movies deleted successfully");
-//    }
 
     @GetMapping()
     public Page<Movie> getAllMovies(@PageableDefault(size = 5) Pageable pageable) {

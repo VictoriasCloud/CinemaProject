@@ -2,6 +2,8 @@ package com.example.cinemaproject.service;
 
 import com.example.cinemaproject.model.Room;
 import com.example.cinemaproject.repository.RoomRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,33 +17,30 @@ public class RoomService {
         this.roomRepository = roomRepository;
     }
 
-    public List<Room> getAllRooms() {
-        return roomRepository.findAll();
+    public Page<Room> getAllRooms(Pageable pageable) {
+        return roomRepository.findAll(pageable);
     }
 
     public Room getRoomById(Long id) {
         return roomRepository.findById(id).orElseThrow(() -> new RuntimeException("Room not found"));
     }
-    // Поиск комнат по имени
-    public List<Room> findRoomsByName(String name) {
-        return roomRepository.findByRoomNameContainingIgnoreCase(name);
+
+    public Page<Room> findRoomsByName(String name, Pageable pageable) {
+        return roomRepository.findByRoomNameContainingIgnoreCase(name, pageable);
     }
 
-    // Поиск комнат по номеру зала
-    public List<Room> findRoomsByNumber(int number) {
-        return roomRepository.findByRoomNumber(number);
+    public Page<Room> findRoomsByNumber(int number, Pageable pageable) {
+        return roomRepository.findByRoomNumber(number, pageable);
     }
 
     public Room createRoom(Room room) {
         return roomRepository.save(room);
     }
 
-    // Создание списка комнат
     public List<Room> createRoomsBatch(List<Room> rooms) {
         return roomRepository.saveAll(rooms);
     }
 
-    // Обновление комнаты
     public Room updateRoom(Long id, Room updatedRoom) {
         Room room = getRoomById(id);
         room.setRoomName(updatedRoom.getRoomName());
@@ -54,7 +53,6 @@ public class RoomService {
         roomRepository.deleteById(id);
     }
 
-    // Удаление всех комнат
     public void deleteAllRooms() {
         roomRepository.deleteAll();
     }

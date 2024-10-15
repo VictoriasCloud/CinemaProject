@@ -16,7 +16,7 @@ public class Movie {
     private String description;
     private int duration;
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
-    @JsonIgnore // или @JsonManagedReference
+    @JsonIgnore
     private List<Session> sessions;
 
     // Геттеры и сеттеры
