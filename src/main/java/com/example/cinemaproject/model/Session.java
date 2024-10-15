@@ -21,7 +21,6 @@ public class Session {
 
     @ManyToOne
     @JoinColumn(name = "movie_id")
-    @JsonBackReference
     private Movie movie;
 
 

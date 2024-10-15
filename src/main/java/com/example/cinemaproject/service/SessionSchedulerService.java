@@ -6,45 +6,49 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-//@Scheduled для периодических задач
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.concurrent.*;
+
 @Service
 @EnableScheduling
 public class SessionSchedulerService {
 
     private final KafkaProducerService kafkaProducerService;
-    private final ScheduledExecutorService scheduler;
+    private final Map<Long, ScheduledFuture<?>> scheduledTasks = new ConcurrentHashMap<>();
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public SessionSchedulerService(KafkaProducerService kafkaProducerService) {
         this.kafkaProducerService = kafkaProducerService;
-        this.scheduler = Executors.newScheduledThreadPool(1); // Пул потоков для планирования задач
     }
 
-    // Метод для планирования отправки сообщения о начале сеанса
+    // Запланировать отправку JSON-сообщения в момент начала сеанса
     public void scheduleSessionStart(Session session) {
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime sessionStartTime = session.getStartTime();
+        long delay = Duration.between(LocalDateTime.now(), session.getStartTime()).toMillis();
 
-        // Рассчитываем задержку до начала сеанса
-        long delay = Duration.between(now, sessionStartTime).toMillis();
+        // Планируем отправку сообщения
+        ScheduledFuture<?> scheduledTask = scheduler.schedule(() -> {
+            Map<String, String> message = new LinkedHashMap<>();
+            message.put("movieTitle", session.getMovie().getTitle());
+            message.put("seatPrice", String.valueOf(session.getSeatPrice()));
+            message.put("roomNumber", String.valueOf(session.getRoom().getRoomNumber()));
+            message.put("sessionStartTime", session.getStartTime().toString());
+            message.put("sessionEndTime", session.getEndTime().toString());
+            message.put("currentTime", LocalDateTime.now().toString());
 
-        if (delay > 0) {
-            // Планируем задачу на будущее время начала сеанса
-            scheduler.schedule(() -> sendSessionStartMessage(session), delay, TimeUnit.MILLISECONDS);
-        } else {
-            // Если время сеанса уже прошло (например, тестирование), сообщение отправляется сразу
-            sendSessionStartMessage(session);
-        }
+            kafkaProducerService.sendSessionStartJsonMessage(message);
+        }, delay, TimeUnit.MILLISECONDS);
+
+        // Сохраняем ссылку на запланированное задание
+        scheduledTasks.put(session.getId(), scheduledTask);
     }
 
-    // Метод для отправки сообщения о начале сеанса
-    private void sendSessionStartMessage(Session session) {
-        String roomNumber = String.valueOf(session.getRoom().getRoomNumber());
-        LocalDateTime startTime = session.getStartTime();
-
-        // Отправляем сообщение в Kafka (JSON)
-        kafkaProducerService.sendSessionStartMessage(roomNumber, startTime);
+    // Отмена ранее запланированной отправки
+    public void cancelScheduledSessionStart(Session session) {
+        ScheduledFuture<?> scheduledTask = scheduledTasks.get(session.getId());
+        if (scheduledTask != null && !scheduledTask.isDone()) {
+            scheduledTask.cancel(true); // Отмена задания
+            scheduledTasks.remove(session.getId());
+        }
     }
 }

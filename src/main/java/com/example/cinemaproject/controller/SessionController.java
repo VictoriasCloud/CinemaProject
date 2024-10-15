@@ -69,9 +69,4 @@ public class SessionController {
         return ResponseEntity.ok(sessions);
     }
 
-    @PostMapping("/start")
-    public ResponseEntity<String> startSession(@RequestParam String roomNumber, @RequestParam LocalDateTime startTime) {
-        kafkaProducerService.sendSessionStartMessage(roomNumber, startTime);
-        return ResponseEntity.ok("Сеанс для зала " + roomNumber + " начался.");
-    }
 }
