@@ -2,9 +2,13 @@ package com.example.cinemaproject.service;
 
 import com.example.cinemaproject.model.Movie;
 import com.example.cinemaproject.repository.MovieRepository;
-import org.springframework.stereotype.Service;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
 
 
 import java.util.List;
@@ -18,9 +22,9 @@ public class MovieService {
         this.movieRepository = movieRepository;
     }
 
-    // Получить список всех фильмов
-    public List<Movie> getAllMovies() {
-        return movieRepository.findAll();
+    // Получить список всех фильмов с пагинацией
+    public Page<Movie> getAllMovies(Pageable pageable) {
+        return movieRepository.findAll(pageable);
     }
 
     // Получить фильм по ID
@@ -64,12 +68,8 @@ public class MovieService {
     }
 
 
-//    // Найти фильм по названию
-//    public Movie getMovieByTitle(String title) {
-//        return movieRepository.findByTitle(title);
-//    }
-
-    public List<Movie> getMoviesByTitle(String title) {
-        return movieRepository.findByTitleContainingIgnoreCase(title);
+    // Поиск фильмов по названию с пагинацией
+    public Page<Movie> getMoviesByTitle(String title, Pageable pageable) {
+        return movieRepository.findByTitleContainingIgnoreCase(title, pageable);
     }
 }

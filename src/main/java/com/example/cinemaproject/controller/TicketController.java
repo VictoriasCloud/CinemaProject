@@ -92,9 +92,9 @@ public class TicketController {
 
     // Возврат
     @PutMapping("/")
-    public ResponseEntity<TicketResponseDTO> returnTicket(@RequestParam Long ticketId) {
+    public ResponseEntity<TicketResponseDTO> returnTicket(@RequestParam Long id) {
         try {
-            TicketResponseDTO ticket = ticketService.returnTicket(ticketId);
+            TicketResponseDTO ticket = ticketService.returnTicket(id);
             return ResponseEntity.ok(ticket);
         } catch (RuntimeException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Если билет не найден
@@ -104,9 +104,9 @@ public class TicketController {
 
     // Удаление билета по ID
     @DeleteMapping("/")
-    public ResponseEntity<?> deleteTicket(@RequestParam Long ticketId) {
+    public ResponseEntity<?> deleteTicket(@RequestParam Long id) {
         try {
-            ticketService.deleteTicket(ticketId);
+            ticketService.deleteTicket(id);
             return ResponseEntity.ok("Ticket has been deleted.");
         } catch (RuntimeException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ticket not found."); // Если билет не найден

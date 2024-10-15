@@ -2,6 +2,11 @@ package com.example.cinemaproject.controller;
 
 import com.example.cinemaproject.model.Movie;
 import com.example.cinemaproject.service.MovieService;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,9 +44,9 @@ public class MovieController {
 //        return ResponseEntity.ok("Movies deleted successfully");
 //    }
 
-    @GetMapping
-    public List<Movie> getAllMovies() {
-        return movieService.getAllMovies();
+    @GetMapping()
+    public Page<Movie> getAllMovies(@PageableDefault(size = 5) Pageable pageable) {
+        return movieService.getAllMovies(pageable);
     }
 
     // Удалить все фильмы
@@ -77,9 +82,8 @@ public class MovieController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Movie>> getMoviesByTitle(@RequestParam String title) {
-        List<Movie> movies = movieService.getMoviesByTitle(title);
-        return ResponseEntity.ok(movies);
+    public Page<Movie> getMoviesByTitle(@RequestParam String title, Pageable pageable) {
+        return movieService.getMoviesByTitle(title, pageable);
     }
 
 }

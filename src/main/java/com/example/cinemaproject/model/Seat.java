@@ -15,7 +15,7 @@ public class Seat {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "room_id")
+    @JoinColumn(name = "room_id", nullable = false) // Связь с комнатой через roomId
     @JsonBackReference
     private Room room;
 
