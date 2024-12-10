@@ -29,7 +29,7 @@ public class RoomController {
     }
 
     // Получение комнаты по ID
-    @GetMapping("/")
+    @GetMapping(params = "id")
     public ResponseEntity<Room> getRoomById(@RequestParam Long id) {
         return ResponseEntity.ok(roomService.getRoomById(id));
     }
@@ -46,22 +46,26 @@ public class RoomController {
         return ResponseEntity.ok(roomService.findRoomsByNumber(number, pageable));
     }
 
+    // Создание новой комнаты
     @PostMapping
     public ResponseEntity<Room> createRoom(@RequestBody Room room) {
         return ResponseEntity.ok(roomService.createRoom(room));
     }
 
+    // Создание списка комнат
     @PostMapping("/batch")
     public ResponseEntity<List<Room>> createRoomsBatch(@RequestBody List<Room> rooms) {
         return ResponseEntity.ok(roomService.createRoomsBatch(rooms));
     }
 
-    @PutMapping("/")
+    // Обновление комнаты
+    @PutMapping
     public ResponseEntity<Room> updateRoom(@RequestParam Long id, @RequestBody Room updatedRoom) {
         return ResponseEntity.ok(roomService.updateRoom(id, updatedRoom));
     }
 
-    @DeleteMapping("/")
+    // Удаление комнаты по ID
+    @DeleteMapping
     public ResponseEntity<Map<String, String>> deleteRoom(@RequestParam Long id) {
         roomService.deleteRoom(id);
         Map<String, String> response = new HashMap<>();
@@ -69,6 +73,7 @@ public class RoomController {
         return ResponseEntity.ok(response);
     }
 
+    // Удаление всех комнат
     @DeleteMapping("/all")
     public ResponseEntity<Map<String, String>> deleteAllRooms() {
         roomService.deleteAllRooms();

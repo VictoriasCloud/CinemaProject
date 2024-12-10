@@ -17,33 +17,40 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
-    }
-
-    @GetMapping("/")
-    public ResponseEntity<User> getUserById(@RequestParam Long id) {
-        return ResponseEntity.ok(userService.getUserById(id));
-    }
-
+    // Создание пользователя
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
         return ResponseEntity.ok(userService.createUser(user));
     }
 
-    @PutMapping("/")
-    public ResponseEntity<User> updateUser(@RequestParam Long id,  @RequestBody User user) {
+    // Получение списка всех пользователей
+    @GetMapping
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    // Получение пользователя по ID
+    @GetMapping(params = "id")
+    public ResponseEntity<User> getUserById(@RequestParam Long id) {
+        return ResponseEntity.ok(userService.getUserById(id));
+    }
+
+    // Редактирование пользователя
+    @PutMapping
+    public ResponseEntity<User> updateUser(@RequestParam Long id, @RequestBody User user) {
         User updatedUser = userService.updateUser(id, user.getEmail(), user.getFullName());
         return ResponseEntity.ok(updatedUser);
     }
 
-    @DeleteMapping("/")
+    // Удаление пользователя по ID
+    @DeleteMapping(params = "id")
     public ResponseEntity<Void> deleteUser(@RequestParam Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
-    @DeleteMapping()
+
+    // Удаление всех пользователей
+    @DeleteMapping
     public ResponseEntity<Void> deleteAllUsers() {
         userService.deleteAllUsers();
         return ResponseEntity.noContent().build();

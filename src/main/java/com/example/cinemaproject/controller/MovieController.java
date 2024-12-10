@@ -37,7 +37,7 @@ public class MovieController {
         return ResponseEntity.ok("Movies updated successfully");
     }
 
-
+    // Получение списка всех фильмов (с пагинацией) 
     @GetMapping()
     public Page<Movie> getAllMovies(@PageableDefault(size = 5) Pageable pageable) {
         return movieService.getAllMovies(pageable);
@@ -50,7 +50,7 @@ public class MovieController {
         return ResponseEntity.ok("All movies have been deleted successfully.");
     }
 
-
+    // Создать фильм
     @PostMapping
     public ResponseEntity<Movie> createMovie(@RequestBody Movie movie) {
         Movie savedMovie = movieService.saveMovie(movie);
@@ -58,26 +58,29 @@ public class MovieController {
     }
 
     // Обновить фильм
-    @PutMapping("/")
+    @PutMapping
     public ResponseEntity<Movie> updateMovie(@RequestParam Long id, @RequestBody Movie updatedMovie) {
         Movie movie = movieService.updateMovie(id, updatedMovie);
         return ResponseEntity.ok(movie);
     }
 
-    @DeleteMapping("/")
+    // Удалить фильм по ID
+    @DeleteMapping
     public ResponseEntity<String> deleteMovie(@RequestParam Long id) {
         movieService.deleteMovie(id);
         return ResponseEntity.ok("Movie with ID " + id + " has been successfully deleted.");
     }
-    @GetMapping("/")
+
+    // Получить фильм по ID
+    @GetMapping
     public ResponseEntity<Movie> getMovieById(@RequestParam Long id) {
         Movie movie = movieService.getMovieById(id);
         return ResponseEntity.ok(movie);
     }
 
+    // Поиск фильмов по названию
     @GetMapping("/search")
     public Page<Movie> getMoviesByTitle(@RequestParam String title, Pageable pageable) {
         return movieService.getMoviesByTitle(title, pageable);
     }
-
 }

@@ -18,42 +18,42 @@ public class SeatController {
     }
 
     // Создать место
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Seat> createSeat(@RequestBody Seat seat, @RequestParam Long sessionId) {
         Seat createdSeat = seatService.createSeat(seat, sessionId);
         return ResponseEntity.ok(createdSeat);
     }
 
     // Получить место по ID
-    @GetMapping("/")
+    @GetMapping(params = "id")
     public ResponseEntity<Seat> getSeatById(@RequestParam Long id) {
         Seat seat = seatService.getSeatById(id);
         return ResponseEntity.ok(seat);
     }
 
     // Обновить место
-    @PutMapping("/")
+    @PutMapping
     public ResponseEntity<Seat> updateSeat(@RequestParam Long id, @RequestBody Seat updatedSeat) {
         Seat seat = seatService.updateSeat(id, updatedSeat);
         return ResponseEntity.ok(seat);
     }
 
     // Удалить место
-    @DeleteMapping("/")
+    @DeleteMapping
     public ResponseEntity<String> deleteSeat(@RequestParam Long id) {
         seatService.deleteSeat(id);
         return ResponseEntity.ok("Seat with ID " + id + " has been successfully deleted.");
     }
 
-    // Получить все места для определенной сессии
-    @GetMapping("/session/")
+    // Получить все места для определённой сессии
+    @GetMapping("/session")
     public ResponseEntity<List<Seat>> getSeatsBySessionId(@RequestParam Long id) {
         List<Seat> seats = seatService.getSeatsBySessionId(id);
         return ResponseEntity.ok(seats);
     }
 
     // Получить все места
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<Seat>> getAllSeats() {
         List<Seat> seats = seatService.getAllSeats();
         return ResponseEntity.ok(seats);
