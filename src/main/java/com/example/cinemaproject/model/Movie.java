@@ -1,13 +1,12 @@
 package com.example.cinemaproject.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 
-//код для описания сущности "Фильм"
 @Entity
 public class Movie {
     @Id
@@ -15,8 +14,10 @@ public class Movie {
     private Long id;
     private String title;
     private String description;
-    private String genre;
-    private LocalDate releaseDate;
+    private int duration;
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Session> sessions;
 
     // Геттеры и сеттеры
     public Long getId() {
@@ -43,19 +44,18 @@ public class Movie {
         this.description = description;
     }
 
-    public String getGenre() {
-        return genre;
+    public int getDuration() {
+        return duration;
     }
 
-    public void setGenre(String genre) {
-        this.genre = genre;
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+    public List<Session> getSessions() {
+        return sessions;
     }
 
-    public LocalDate getReleaseDate() {
-        return releaseDate;
-    }
-
-    public void setReleaseDate(LocalDate releaseDate) {
-        this.releaseDate = releaseDate;
+    public void setSessions(List<Session> sessions) {
+        this.sessions = sessions;
     }
 }
